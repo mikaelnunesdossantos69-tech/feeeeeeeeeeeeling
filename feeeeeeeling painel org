@@ -1,0 +1,851 @@
+--// Painel Feeling <3 — Corrigido (neve +++ + anim min/max + old lights)
+--// Original: ZoeWarOnTop | Edição: Raveely
+
+local E=game:GetService("Players")
+local i=game:GetService("SoundService")
+local Y=game:GetService("RunService")
+local j=game:GetService("UserInputService")
+local TweenService=game:GetService("TweenService")
+local o=(settings()):GetService("NetworkSettings")
+local k=game:GetService("Lighting")
+local M=E.LocalPlayer
+local U=M:WaitForChild("PlayerGui")
+local p=Color3.fromRGB(175,203,227)   -- AFCBE3 (Desativado)
+local q=Color3.fromRGB(201,222,239)   -- C9DEEF (Ativado)
+
+local N=Instance.new("ScreenGui")
+N.Name="ControlPanelGui"
+N.ResetOnSpawn=false
+N.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
+N.Parent=U
+
+-- ═══════════════════════════════════════════
+-- PAINEL
+-- ═══════════════════════════════════════════
+local TAM_FECHADO=UDim2.new(0,0,0,0)
+local TAM_ABERTO=UDim2.new(0,220,0,395)
+local TAM_MIN=UDim2.new(0,220,0,35)
+
+local c=Instance.new("Frame")
+c.Name="MainFrame"
+c.Size=TAM_ABERTO
+c.AnchorPoint=Vector2.new(0.5,0.5)
+c.Position=UDim2.new(0.5,0,0.5,0)
+c.BackgroundColor3=Color3.fromRGB(230,241,250)
+c.Active=true
+c.Draggable=true
+c.ClipsDescendants=true
+c.ZIndex=1
+c.Parent=N
+
+local V=Instance.new("UICorner")
+V.CornerRadius=UDim.new(0,10)
+V.Parent=c
+
+-- ❄️ Camada de neve
+local snowLayer=Instance.new("Frame")
+snowLayer.Name="SnowLayer"
+snowLayer.Size=UDim2.new(1,0,1,0)
+snowLayer.Position=UDim2.new(0,0,0,0)
+snowLayer.BackgroundTransparency=1
+snowLayer.BorderSizePixel=0
+snowLayer.ZIndex=2
+snowLayer.ClipsDescendants=true
+snowLayer.Parent=c
+
+local P=Instance.new("TextLabel")
+P.Name="Title"
+P.Size=UDim2.new(1,-35,0,35)
+P.Position=UDim2.new(0,10,0,0)
+P.BackgroundTransparency=1
+P.Text="Painel Feeling <3"
+P.TextColor3=Color3.fromRGB(60,80,100)
+P.Font=Enum.Font.SourceSansBold
+P.TextSize=16
+P.TextXAlignment=Enum.TextXAlignment.Left
+P.ZIndex=5
+P.Parent=c
+
+local u=Instance.new("TextButton")
+u.Name="MinimizeButton"
+u.Size=UDim2.new(0,25,0,25)
+u.Position=UDim2.new(1,-30,0,5)
+u.BackgroundColor3=p
+u.TextColor3=Color3.fromRGB(60,80,100)
+u.Text="-"
+u.Font=Enum.Font.SourceSansBold
+u.TextSize=18
+u.ZIndex=5
+u.Parent=c
+
+local Z=Instance.new("UICorner")
+Z.CornerRadius=UDim.new(0,6)
+Z.Parent=u
+
+local f=Instance.new("Frame")
+f.Name="ContentFrame"
+f.Size=UDim2.new(1,0,1,-35)
+f.Position=UDim2.new(0,0,0,35)
+f.BackgroundTransparency=1
+f.ZIndex=5
+f.Parent=c
+
+-- ═══════════════════════════════════════════
+-- BOTÕES
+-- ═══════════════════════════════════════════
+local v=Instance.new("TextButton")
+v.Name="BtnOldAnim"
+v.Size=UDim2.new(.88,0,0,35)
+v.Position=UDim2.new(.06,0,0,5)
+v.BackgroundColor3=p
+v.TextColor3=Color3.fromRGB(60,80,100)
+v.Text="Old Animation: Desativado"
+v.Font=Enum.Font.SourceSans
+v.TextSize=15
+v.Parent=f
+local z=Instance.new("UICorner")
+z.CornerRadius=UDim.new(0,6)
+z.Parent=v
+
+local x=Instance.new("TextButton")
+x.Name="BtnSpeed"
+x.Size=UDim2.new(.88,0,0,35)
+x.Position=UDim2.new(.06,0,0,48)
+x.BackgroundColor3=p
+x.TextColor3=Color3.fromRGB(60,80,100)
+x.Text="Speed: Desativado"
+x.Font=Enum.Font.SourceSans
+x.TextSize=15
+x.Parent=f
+local F=Instance.new("UICorner")
+F.CornerRadius=UDim.new(0,6)
+F.Parent=x
+
+local J=Instance.new("TextButton")
+J.Name="BtnSoundGun"
+J.Size=UDim2.new(.88,0,0,35)
+J.Position=UDim2.new(.06,0,0,91)
+J.BackgroundColor3=p
+J.TextColor3=Color3.fromRGB(60,80,100)
+J.Text="Sound Gun: Desativado"
+J.Font=Enum.Font.SourceSans
+J.TextSize=15
+J.Parent=f
+local Q=Instance.new("UICorner")
+Q.CornerRadius=UDim.new(0,6)
+Q.Parent=J
+
+local R=Instance.new("TextButton")
+R.Name="BtnOldShift"
+R.Size=UDim2.new(.88,0,0,35)
+R.Position=UDim2.new(.06,0,0,134)
+R.BackgroundColor3=p
+R.TextColor3=Color3.fromRGB(60,80,100)
+R.Text="Old Shift: Desativado"
+R.Font=Enum.Font.SourceSans
+R.TextSize=15
+R.Parent=f
+local X=Instance.new("UICorner")
+X.CornerRadius=UDim.new(0,6)
+X.Parent=R
+
+local e=Instance.new("TextButton")
+e.Name="BtnCameraOld"
+e.Size=UDim2.new(.88,0,0,35)
+e.Position=UDim2.new(.06,0,0,177)
+e.BackgroundColor3=p
+e.TextColor3=Color3.fromRGB(60,80,100)
+e.Text="Camera Old: Desativado"
+e.Font=Enum.Font.SourceSans
+e.TextSize=15
+e.Parent=f
+local g=Instance.new("UICorner")
+g.CornerRadius=UDim.new(0,6)
+g.Parent=e
+
+local w=Instance.new("TextButton")
+w.Name="BtnConfete"
+w.Size=UDim2.new(.88,0,0,35)
+w.Position=UDim2.new(.06,0,0,220)
+w.BackgroundColor3=p
+w.TextColor3=Color3.fromRGB(60,80,100)
+w.Text="Confete: Desativado"
+w.Font=Enum.Font.SourceSans
+w.TextSize=15
+w.Parent=f
+local r=Instance.new("UICorner")
+r.CornerRadius=UDim.new(0,6)
+r.Parent=w
+
+local btnCoil=Instance.new("TextButton")
+btnCoil.Name="BtnCoil"
+btnCoil.Size=UDim2.new(.88,0,0,35)
+btnCoil.Position=UDim2.new(.06,0,0,263)
+btnCoil.BackgroundColor3=p
+btnCoil.TextColor3=Color3.fromRGB(60,80,100)
+btnCoil.Text="Gravity Coil: Desativado"
+btnCoil.Font=Enum.Font.SourceSans
+btnCoil.TextSize=15
+btnCoil.Parent=f
+local rc=Instance.new("UICorner")
+rc.CornerRadius=UDim.new(0,6)
+rc.Parent=btnCoil
+
+local btnOldLights=Instance.new("TextButton")
+btnOldLights.Name="BtnOldLights"
+btnOldLights.Size=UDim2.new(.88,0,0,35)
+btnOldLights.Position=UDim2.new(.06,0,0,306)
+btnOldLights.BackgroundColor3=p
+btnOldLights.TextColor3=Color3.fromRGB(60,80,100)
+btnOldLights.Text="Old Lights: Desativado"
+btnOldLights.Font=Enum.Font.SourceSans
+btnOldLights.TextSize=15
+btnOldLights.Parent=f
+local rcl=Instance.new("UICorner")
+rcl.CornerRadius=UDim.new(0,6)
+rcl.Parent=btnOldLights
+
+-- ═══════════════════════════════════════════
+-- ❄️ FLOCOS DE NEVE (MUITO MAIS)
+-- ═══════════════════════════════════════════
+local function criarFloco()
+    local floco=Instance.new("Frame")
+    local tamanho=math.random(4,8)
+    floco.Size=UDim2.new(0,tamanho,0,tamanho)
+    floco.BackgroundColor3=Color3.fromRGB(255,255,255)
+    floco.BackgroundTransparency=math.random(5,30)/100
+    floco.BorderSizePixel=0
+    floco.ZIndex=1
+    floco.Position=UDim2.new(math.random(),0,-0.15,0)
+    
+    local corner=Instance.new("UICorner")
+    corner.CornerRadius=UDim.new(1,0)
+    corner.Parent=floco
+    
+    floco.Parent=snowLayer
+    
+    local function cair()
+        if not floco.Parent then return end
+        local duracao=math.random(4,9)
+        local destinoX=math.random()
+        floco.Position=UDim2.new(math.random(),0,-0.15,0)
+        local tween=TweenService:Create(floco,TweenInfo.new(duracao,Enum.EasingStyle.Linear),{
+            Position=UDim2.new(destinoX,0,1.15,0)
+        })
+        tween:Play()
+        tween.Completed:Connect(function()
+            if floco.Parent then cair() end
+        end)
+    end
+    cair()
+end
+
+for idx=1,60 do
+    task.spawn(function()
+        task.wait(math.random(0,80)/100)
+        criarFloco()
+    end)
+end
+
+-- ═══════════════════════════════════════════
+-- 🍎 ANIMAÇÃO ESTILO IPHONE + MIN/MAX ANIMADO
+-- ═══════════════════════════════════════════
+local panelOpen=true
+local panelMinimizado=false
+local animando=false
+local posicaoBase=UDim2.new(0.5,0,0.5,0)
+
+local function animarAltura(novaAltura, duracao, estilo, direcao)
+    local posAtual=c.Position
+    local sizeAtual=c.Size
+    local topoY=posAtual.Y.Offset - sizeAtual.Y.Offset * c.AnchorPoint.Y
+    local novoY=topoY + novaAltura * c.AnchorPoint.Y
+    local tween=TweenService:Create(c,
+        TweenInfo.new(duracao, estilo, direcao), {
+            Size=UDim2.new(sizeAtual.X.Scale, sizeAtual.X.Offset, 0, novaAltura),
+            Position=UDim2.new(posAtual.X.Scale, posAtual.X.Offset, posAtual.Y.Scale, novoY)
+        })
+    tween:Play()
+    return tween
+end
+
+local function abrirPainel()
+    if panelOpen or animando then return end
+    animando=true
+    c.Visible=true
+    c.Size=TAM_FECHADO
+    c.Position=posicaoBase
+    panelMinimizado=false
+    f.Visible=true
+    u.Text="-"
+    u.BackgroundColor3=p
+    local tween=TweenService:Create(c,
+        TweenInfo.new(0.45,Enum.EasingStyle.Back,Enum.EasingDirection.Out),
+        {Size=TAM_ABERTO, Position=posicaoBase})
+    tween:Play()
+    tween.Completed:Connect(function()
+        animando=false
+        panelOpen=true
+    end)
+end
+
+local function fecharPainel()
+    if not panelOpen or animando then return end
+    animando=true
+    posicaoBase=c.Position
+    local posAtual=c.Position
+    local centroY=posAtual.Y.Offset
+    local tween=TweenService:Create(c,
+        TweenInfo.new(0.25,Enum.EasingStyle.Back,Enum.EasingDirection.In), {
+            Size=TAM_FECHADO,
+            Position=UDim2.new(posAtual.X.Scale, posAtual.X.Offset, posAtual.Y.Scale, centroY)
+        })
+    tween:Play()
+    tween.Completed:Connect(function()
+        c.Visible=false
+        animando=false
+        panelOpen=false
+    end)
+end
+
+c.Size=TAM_FECHADO
+panelOpen=false
+task.spawn(function()
+    task.wait(0.15)
+    animando=true
+    local tw=TweenService:Create(c,
+        TweenInfo.new(0.55,Enum.EasingStyle.Back,Enum.EasingDirection.Out),
+        {Size=TAM_ABERTO})
+    tw:Play()
+    tw.Completed:Connect(function()
+        animando=false
+        panelOpen=true
+    end)
+end)
+
+j.InputBegan:Connect(function(input,processado)
+    if input.KeyCode==Enum.KeyCode.Tab then
+        if panelOpen then
+            fecharPainel()
+        else
+            abrirPainel()
+        end
+    end
+end)
+
+u.MouseButton1Click:Connect(function()
+    if animando then return end
+    if not panelMinimizado then
+        animando=true
+        u.Text="+"
+        u.BackgroundColor3=q
+        local tw=animarAltura(35, 0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+        tw.Completed:Connect(function()
+            f.Visible=false
+            animando=false
+            panelMinimizado=true
+        end)
+    else
+        animando=true
+        f.Visible=true
+        u.Text="-"
+        u.BackgroundColor3=p
+        local tw=animarAltura(395, 0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+        tw.Completed:Connect(function()
+            animando=false
+            panelMinimizado=false
+        end)
+    end
+end)
+
+-- OLD ANIMATION
+local W=false
+v.MouseButton1Click:Connect(function()
+    W=not W
+    if W then
+        game.Workspace.Retargeting=Enum.AnimatorRetargetingMode.Disabled
+        v.Text="Old Animation: Ativado"
+        v.BackgroundColor3=q
+    else
+        game.Workspace.Retargeting=Enum.AnimatorRetargetingMode.Default
+        v.Text="Old Animation: Desativado"
+        v.BackgroundColor3=p
+    end
+end)
+
+-- SPEED GLITCH
+local G=false
+local K={}
+local H={WaterBalloon2024=true;SnowballToy2020=true,IceCream=true}
+local function B(E)
+    local i=E:WaitForChild("Humanoid")
+    local Y=E:WaitForChild("HumanoidRootPart")
+    if E:FindFirstChild("GlitchPart")then E.GlitchPart:Destroy()end
+    local j=Instance.new("Part")
+    j.Name="GlitchPart"
+    j.Size=Vector3.new(2,2,2)
+    j.Transparency=1
+    j.CanCollide=false
+    j.CanTouch=false
+    j.CanQuery=false
+    j.Parent=E
+    local o=Instance.new("Weld")
+    o.Part0=Y
+    o.Part1=j
+    o.Parent=j
+    local function k(E)o.C0=CFrame.new(0,0,E)end
+    local M=nil
+    local U=false
+    local p=0
+    local q=nil
+    local N=false
+    local c=false
+    local V=false
+    local P={["http://www.roblox.com/asset/?id=15609995579"]="normal",["rbxassetid://15609995579"]="normal",["rbxassetid://107481557610007"]="forte"}
+    local function u(E)U=true p=E j.Transparency=1 k(E)end
+    local function Z()U=false N=false p=0 c=false V=false j.Transparency=1 k(0)end
+    local f=i.AnimationPlayed:Connect(function(E)
+        if E.Animation then
+            local i=P[E.Animation.AnimationId]
+            if i then
+                M=i p=0 c=false V=false
+                E.Stopped:Connect(function()M=nil c=true V=q~=nil end)
+            end
+        end
+    end)
+    local v=E.ChildRemoved:Connect(function(E)
+        if H[E.Name]then
+            if M=="normal"then p=10.5
+            elseif M=="forte"then p=26.5 end
+            if U then k(p)end
+        end
+        if E:IsA("Tool")then
+            if E==q then
+                q=nil
+                if c and V then c=false V=false Z()
+                elseif not M and not H[E.Name]then Z()end
+            end
+        end
+    end)
+    local z=E.ChildAdded:Connect(function(E)
+        if E:IsA("Tool")then
+            q=E
+            if c and not V then c=false Z()return end
+            local Y=i:GetState()==Enum.HumanoidStateType.Climbing
+            if Y then N=true U=true k(3.5)
+            elseif M=="normal"then
+                if p>0 then u(p)else u(7.5)end
+            elseif M=="forte"then
+                if p>0 then u(p)else u(10.5)end
+            end
+        end
+    end)
+    table.insert(K,f)table.insert(K,v)table.insert(K,z)
+    task.spawn(function()
+        while E.Parent and G do
+            task.wait(.05)
+            if U then
+                if N then k(3.5)else k(p)end
+            end
+        end
+    end)
+end
+local t=nil
+x.MouseButton1Click:Connect(function()
+    G=not G
+    if G then
+        x.Text="Speed: Ativado"
+        x.BackgroundColor3=q
+        if M.Character then B(M.Character)end
+        t=M.CharacterAdded:Connect(B)
+    else
+        x.Text="Speed: Desativado"
+        x.BackgroundColor3=p
+        if t then t:Disconnect()t=nil end
+        for E,i in ipairs(K)do i:Disconnect()end
+        table.clear(K)
+        if M.Character and M.Character:FindFirstChild("GlitchPart")then M.Character.GlitchPart:Destroy()end
+    end
+end)
+
+-- SOUND GUN
+local s=false
+local m={}
+local a=nil
+local l=nil
+local h="rbxassetid://6968135315"
+local I="Gun"
+local S=2
+local function d(E)
+    if not s then return end
+    local i=E:WaitForChild("Humanoid",10)
+    local Y=i and i:WaitForChild("Animator",10)
+    local j=0
+    if Y then
+        local i=Y.AnimationPlayed:Connect(function(i)
+            local Y=E:FindFirstChildOfClass("Tool")
+            local o=(Y and Y.Name==I)
+            local k=os.clock()-j
+            local M=k<=S
+            if o or M then
+                if i.Priority==Enum.AnimationPriority.Action then i:Stop()end
+            end
+        end)
+        table.insert(m,i)
+    end
+    local o=E.ChildAdded:Connect(function(E)
+        if E:IsA("Tool")and E.Name==I then
+            if a then a:Play()end
+        end
+    end)
+    local k=E.ChildRemoved:Connect(function(E)
+        if E:IsA("Tool")and E.Name==I then
+            if a then a:Play()end
+            j=os.clock()
+        end
+    end)
+    table.insert(m,o)table.insert(m,k)
+end
+J.MouseButton1Click:Connect(function()
+    s=not s
+    if s then
+        J.Text="Sound Gun: Ativado"
+        J.BackgroundColor3=q
+        if not a then
+            a=Instance.new("Sound")
+            a.SoundId=h
+            a.Volume=1
+            a.Parent=i
+        end
+        if M.Character then d(M.Character)end
+        l=M.CharacterAdded:Connect(d)
+    else
+        J.Text="Sound Gun: Desativado"
+        J.BackgroundColor3=p
+        if l then l:Disconnect()l=nil end
+        for E,i in ipairs(m)do i:Disconnect()end
+        table.clear(m)
+        if a then a:Destroy()a=nil end
+    end
+end)
+
+-- OLD SHIFT
+local n=false
+local y=nil
+local b=false
+local D=Vector3.new(.9,1.1,0)
+local L=Vector3.new(0,0,0)
+local function C()
+    if y then y:Disconnect()y=nil end
+    b=false
+    if M.Character and M.Character:FindFirstChild("Humanoid")then
+        M.Character.Humanoid.CameraOffset=L
+    end
+end
+local function A()
+    C()
+    y=Y.RenderStepped:Connect(function()
+        if not M.Character or not M.Character:FindFirstChild("Humanoid")then return end
+        local E=M.Character.Humanoid
+        if j.MouseBehavior==Enum.MouseBehavior.LockCenter then
+            if not b then b=true E.CameraOffset=D end
+        else
+            if b then b=false E.CameraOffset=L end
+        end
+    end)
+end
+R.MouseButton1Click:Connect(function()
+    n=not n
+    if n then
+        R.Text="Old Shift: Ativado"
+        R.BackgroundColor3=q
+        A()
+    else
+        R.Text="Old Shift: Desativado"
+        R.BackgroundColor3=p
+        C()
+    end
+end)
+M.CharacterAdded:Connect(function(E)if n then task.wait(.1)A()end end)
+
+-- CAMERA OLD
+local O=false
+local Ee=nil
+local ie=workspace.CurrentCamera
+local Ye=.3
+local function je()return((ie.Focus.Position-ie.CFrame.Position)).Magnitude<1 end
+e.MouseButton1Click:Connect(function()
+    O=not O
+    if O then
+        e.Text="Camera Old: Ativado"
+        e.BackgroundColor3=q
+        Ee=Y.RenderStepped:Connect(function()
+            if not je()then
+                local E=ie.CFrame
+                ie.CFrame=E+Vector3.new(0,Ye,0)
+            end
+        end)
+    else
+        e.Text="Camera Old: Desativado"
+        e.BackgroundColor3=p
+        if Ee then Ee:Disconnect()Ee=nil end
+    end
+end)
+
+-- CONFETE
+local oe=false
+local ke=1.5
+local Me=5.0
+local function Ue()
+    if not oe then return end
+    pcall(function()
+        o.IncomingReplicationLag=Me
+        o.OutgoingReplicationLag=Me
+    end)
+    local E=tick()
+    local i
+    i=Y.RenderStepped:Connect(function()
+        if tick()-E<ke then
+            task.wait(math.random(.05,.15))
+        else
+            i:Disconnect()
+        end
+    end)
+    task.delay(ke,function()
+        pcall(function()
+            o.IncomingReplicationLag=0
+            o.OutgoingReplicationLag=0
+        end)
+    end)
+end
+local function pe(E)
+    local i=E:WaitForChild("Humanoid",5)
+    if not i then return end
+    i.Died:Connect(function()Ue()end)
+end
+for E,i in ipairs(E:GetPlayers())do
+    if i.Character then pe(i.Character)end
+    i.CharacterAdded:Connect(pe)
+end
+E.PlayerAdded:Connect(function(E)E.CharacterAdded:Connect(pe)end)
+local function qe()
+    oe=not oe
+    if oe then
+        w.Text="Confete: Ativado"
+        w.BackgroundColor3=q
+    else
+        w.Text="Confete: Desativado"
+        w.BackgroundColor3=p
+        pcall(function()
+            o.IncomingReplicationLag=0
+            o.OutgoingReplicationLag=0
+        end)
+    end
+end
+w.MouseButton1Click:Connect(qe)
+j.InputBegan:Connect(function(E,i)
+    if i then return end
+    if E.KeyCode==Enum.KeyCode.Y then qe()end
+end)
+
+-- GRAVITY COIL
+local coilEnabled=false
+local gravityConn=nil
+local originalGravity=workspace.Gravity
+local originalJump=nil
+
+local function applyGravity(enable)
+    local char=M.Character
+    if not char then return end
+    local hum=char:FindFirstChildOfClass("Humanoid")
+    if not hum then return end
+    
+    if enable then
+        if not originalJump then originalJump=hum.JumpPower end
+        hum.JumpPower=50
+        hum.UseJumpPower=true
+        workspace.Gravity=60
+        
+        if gravityConn then gravityConn:Disconnect() end
+        gravityConn=Y.Heartbeat:Connect(function()
+            if not coilEnabled then return end
+            local c=M.Character
+            if not c then return end
+            local h=c:FindFirstChildOfClass("Humanoid")
+            if h then
+                h.JumpPower=50
+                h.UseJumpPower=true
+            end
+            workspace.Gravity=60
+        end)
+    else
+        if gravityConn then gravityConn:Disconnect() gravityConn=nil end
+        workspace.Gravity=originalGravity
+        local c=M.Character
+        if c then
+            local h=c:FindFirstChildOfClass("Humanoid")
+            if h and originalJump then h.JumpPower=originalJump end
+        end
+    end
+end
+
+local function createCoil()
+    local tool=Instance.new("Tool")
+    tool.Name="GravityCoil"
+    tool.RequiresHandle=true
+    tool.CanBeDropped=false
+    tool.ToolTip="Reduz gravidade"
+    
+    local handle=Instance.new("Part")
+    handle.Name="Handle"
+    handle.Size=Vector3.new(1,2,1)
+    handle.Transparency=1
+    handle.CanCollide=false
+    handle.Parent=tool
+    
+    local mesh=Instance.new("SpecialMesh")
+    mesh.MeshType=Enum.MeshType.FileMesh
+    mesh.MeshId="rbxassetid://1082548970"
+    mesh.TextureId=""
+    mesh.Parent=handle
+    
+    handle.Color=Color3.fromRGB(50,100,255)
+    handle.Material=Enum.Material.Plastic
+    
+    local light=Instance.new("PointLight")
+    light.Color=Color3.fromRGB(50,100,255)
+    light.Range=6
+    light.Brightness=1.2
+    light.Parent=handle
+    
+    local sound=Instance.new("Sound")
+    sound.Name="CoilSound"
+    sound.SoundId="rbxassetid://9125402735"
+    sound.Volume=0.5
+    sound.Looped=true
+    sound.Parent=handle
+    
+    tool.Equipped:Connect(function()
+        coilEnabled=true
+        applyGravity(true)
+        if sound then pcall(function() sound:Play() end) end
+    end)
+    
+    tool.Unequipped:Connect(function()
+        coilEnabled=false
+        applyGravity(false)
+        if sound then pcall(function() sound:Stop() end) end
+    end)
+    
+    tool.Grip=CFrame.new(0,-0.2,-0.3)*CFrame.Angles(math.rad(90),0,0)
+    return tool
+end
+
+btnCoil.MouseButton1Click:Connect(function()
+    if not coilEnabled then
+        local tool=createCoil()
+        local backpack=M:FindFirstChild("Backpack")
+        if backpack then
+            tool.Parent=backpack
+            btnCoil.Text="Gravity Coil: Criado ✓"
+            btnCoil.BackgroundColor3=q
+            coilEnabled=true
+            task.wait(0.1)
+        end
+    else
+        coilEnabled=false
+        applyGravity(false) 
+        local backpack=M:FindFirstChild("Backpack")
+        if backpack then
+            for _,t in pairs(backpack:GetChildren())do
+                if t:IsA("Tool")and t.Name=="GravityCoil"then t:Destroy()end
+            end
+        end
+        local char=M.Character
+        if char then
+            for _,t in pairs(char:GetChildren())do
+                if t:IsA("Tool")and t.Name=="GravityCoil"then t:Destroy()end
+            end
+        end
+        btnCoil.Text="Gravity Coil: Desativado"
+        btnCoil.BackgroundColor3=p
+    end
+end)
+
+-- ═══════════════════════════════════════════
+-- 🌙 OLD LIGHTS (ativar / desativar)
+-- ═══════════════════════════════════════════
+local oldLightsLoaded=false
+local oldLightsSnapshot=nil
+
+-- Propriedades de Lighting que vamos salvar/restaurar
+local PROPS_LIGHTING={
+    "Ambient","OutdoorAmbient","Brightness","ClockTime","TimeOfDay",
+    "GeographicLatitude","FogColor","FogStart","FogEnd","FogMode",
+    "ColorShift_Top","ColorShift_Bottom","ExposureCompensation",
+    "EnvironmentDiffuseScale","EnvironmentSpecularScale",
+    "GlobalShadows","ShadowSoftness","OutdoorAmbient"
+}
+
+local function capturarLighting()
+    local props={}
+    for _,nome in ipairs(PROPS_LIGHTING) do
+        local ok,valor=pcall(function() return k[nome] end)
+        if ok then props[nome]=valor end
+    end
+    local children={}
+    for _,child in ipairs(k:GetChildren()) do
+        children[child]=true
+    end
+    return {props=props, children=children}
+end
+
+local function restaurarLighting(snap)
+    if not snap then return end
+    -- Restaura propriedades
+    for nome,valor in pairs(snap.props) do
+        pcall(function() k[nome]=valor end)
+    end
+    -- Remove instâncias que o script criou (Atmosphere, Sky, ColorCorrection, etc)
+    for _,child in ipairs(k:GetChildren()) do
+        if not snap.children[child] then
+            pcall(function() child:Destroy() end)
+        end
+    end
+end
+
+btnOldLights.MouseButton1Click:Connect(function()
+    if not oldLightsLoaded then
+        -- ▶ ATIVAR
+        btnOldLights.Text="Old Lights: Carregando..."
+        btnOldLights.BackgroundColor3=q
+
+        oldLightsSnapshot=capturarLighting()
+
+        local sucesso,erro=pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/mikaelnunesdossantos69-tech/old-light/refs/heads/main/old%20lights"))()
+        end)
+
+        task.wait(0.6)
+
+        if sucesso then
+            oldLightsLoaded=true
+            btnOldLights.Text="Old Lights: Ativado ✓"
+            btnOldLights.BackgroundColor3=q
+        else
+            oldLightsLoaded=false
+            btnOldLights.Text="Old Lights: Erro ❌"
+            btnOldLights.BackgroundColor3=p
+            warn("[Old Lights] Erro: "..tostring(erro))
+            restaurarLighting(oldLightsSnapshot)
+            oldLightsSnapshot=nil
+        end
+    else
+        -- ⏹ DESATIVAR — restaura tudo
+        restaurarLighting(oldLightsSnapshot)
+        oldLightsSnapshot=nil
+        oldLightsLoaded=false
+        btnOldLights.Text="Old Lights: Desativado"
+        btnOldLights.BackgroundColor3=p
+    end
+end)
